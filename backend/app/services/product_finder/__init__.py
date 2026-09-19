@@ -6,7 +6,9 @@ from .query_builder import build_search_queries
 from .searcher import discover_products
 from .scraper import fetch_page
 from .validators import validate_products
-
+from app.services.product_finder.visual_searcher import (
+    search_products_visually,
+)
 
 __all__ = [
     "analyze_clothing",
@@ -17,4 +19,5 @@ __all__ = [
     "extract_product",
     "validate_products",
     "clean_products",
+    "search_products_visually"
 ]
