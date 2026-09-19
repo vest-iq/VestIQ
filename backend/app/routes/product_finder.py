@@ -1,16 +1,9 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 
-from app.services.dependencies import (
-    get_valid_image,
-)
-
+from app.services.dependencies import get_valid_image
 from app.services.product_finder import (
-    analyze_clothing,
-    build_search_queries,
     clean_products,
-    discover_products,
-    extract_product,
-    fetch_page,
+    search_products_visually,
     validate_products,
 )
 
@@ -23,167 +16,63 @@ router = APIRouter(
 
 @router.post("/search")
 async def find_products(
-    image_bytes: bytes = Depends(
-        get_valid_image
-    ),
+    image_bytes: bytes = Depends(get_valid_image),
 ):
+    """
+    Search the internet for visually similar products
+    using Google Lens through SerpApi.
+    """
 
-    # =====================================================
-    # 1. IMAGE → CLOTHING ANALYSIS
-    # =====================================================
-
-    analysis = analyze_clothing(
-        image_bytes
-    )
-
-    # =====================================================
-    # 2. ANALYSIS → SEARCH QUERIES
-    # =====================================================
-
-    search_queries = (
-        build_search_queries(
-            analysis
-        )
-    )
-
-    # =====================================================
-    # 3. SEARCH → REAL URLS
-    # =====================================================
-
-    discovered_urls = (
-        discover_products(
-            search_queries,
-            results_per_query=5,
-            max_total_results=20,
-        )
-    )
-
-    # =====================================================
-    # 4. FETCH + EXTRACT
-    # =====================================================
-
-    products = []
-
-    scrape_results = []
-
-    extraction_results = []
-
-    for url in discovered_urls:
-
-        html, metadata = fetch_page(
-            url
+    try:
+        products, diagnostics = search_products_visually(
+            image_bytes
         )
 
-        scrape_results.append(
-            metadata
+    except RuntimeError as exc:
+        raise HTTPException(
+            status_code=503,
+            detail=str(exc),
         )
 
-        if not html:
-
-            extraction_results.append(
-                {
-                    "url": url,
-                    "extracted": False,
-                    "reason": metadata.get(
-                        "error"
-                    ),
-                    "diagnostics": None,
-                }
-            )
-
-            continue
-
-        product, diagnostics = (
-            extract_product(
-                html,
-                url,
-            )
+    except Exception as exc:
+        print(
+            "\n[PRODUCT FINDER ERROR]"
+        )
+        print(
+            f"Type: {type(exc).__name__}"
+        )
+        print(
+            f"Error: {exc}"
         )
 
-        if product:
-
-            products.append(
-                product
-            )
-
-            extraction_results.append(
-                {
-                    "url": url,
-                    "extracted": True,
-                    "reason": None,
-                    "diagnostics": diagnostics,
-                }
-            )
-
-        else:
-
-            extraction_results.append(
-                {
-                    "url": url,
-                    "extracted": False,
-                    "reason": (
-                        "No product data "
-                        "could be extracted"
-                    ),
-                    "diagnostics": diagnostics,
-                }
-            )
-
-    # =====================================================
-    # 5. VALIDATION
-    # =====================================================
+        raise HTTPException(
+            status_code=502,
+            detail=(
+                "Visual product search "
+                "is temporarily unavailable."
+            ),
+        )
 
     products = validate_products(
         products
     )
 
-    # =====================================================
-    # 6. CLEAN + DEDUPLICATE
-    # =====================================================
-
     products = clean_products(
         products
     )
 
-    successful_scrapes = sum(
-        1
-        for result in scrape_results
-        if result.get("success")
-    )
-
-    successful_extractions = sum(
-        1
-        for result in extraction_results
-        if result.get("extracted")
-    )
-
     return {
-        "analysis": analysis.model_dump(),
-
-        "search_queries": search_queries,
-
-        "discovered_urls": len(
-            discovered_urls
+        "provider": diagnostics.get(
+            "provider"
         ),
-
-        "pages_fetched": successful_scrapes,
-
-        "pages_with_products": (
-            successful_extractions
+        "cached": diagnostics.get(
+            "cached",
+            False,
         ),
-
-        "products_found": len(
-            products
-        ),
-
+        "products_found": len(products),
         "products": [
             product.model_dump()
             for product in products
         ],
-
-        # Diagnostics are temporary.
-        # We will remove/reduce them later.
-        "scrape_diagnostics": (
-            extraction_results
-        ),
+        "diagnostics": diagnostics,
     }
