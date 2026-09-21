@@ -9,6 +9,7 @@ from .validators import validate_products
 from app.services.product_finder.visual_searcher import (
     search_products_visually,
 )
+from .enricher import enrich_products
 
 __all__ = [
     "analyze_clothing",
@@ -19,5 +20,6 @@ __all__ = [
     "extract_product",
     "validate_products",
     "clean_products",
-    "search_products_visually"
+    "search_products_visually",
+    "enrich_products",
 ]
