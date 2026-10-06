@@ -1,0 +1,275 @@
+{
+  "dress": {
+    "pairing": [],
+    "footwear": [
+      "white sneakers",
+      "simple sandals"
+    ],
+    "accessories": [
+      "minimal jewelry",
+      "simple watch",
+      "small crossbody bag",
+      "simple structured bag"
+    ],
+    "layering": [
+      "denim jacket",
+      "lightweight cardigan"
+    ],
+    "styles": {
+      "casual": {
+        "pairing": [],
+        "footwear": [
+          "white sneakers"
+        ],
+        "accessories": [
+          "crossbody bag"
+        ],
+        "layering": [
+          "denim jacket"
+        ]
+      },
+      "minimal": {
+        "pairing": [],
+        "footwear": [
+          "simple sandals"
+        ],
+        "accessories": [
+          "minimal jewelry",
+          "simple watch",
+          "simple structured bag"
+        ],
+        "layering": [
+          "lightweight cardigan"
+        ]
+      },
+      "sporty": {
+        "pairing": [],
+        "footwear": [
+          "clean sneakers"
+        ],
+        "accessories": [
+          "simple cap"
+        ],
+        "layering": [
+          "lightweight jacket"
+        ]
+      }
+    }
+  },
+
+  "jacket": {
+    "pairing": [
+      "basic t-shirt"
+    ],
+    "footwear": [
+      "sneakers"
+    ],
+    "accessories": [
+      "simple watch",
+      "crossbody bag"
+    ],
+    "layering": [],
+    "styles": {
+      "casual": {
+        "pairing": [
+          "basic t-shirt"
+        ],
+        "footwear": [
+          "sneakers"
+        ],
+        "accessories": [
+          "crossbody bag"
+        ],
+        "layering": []
+      },
+      "minimal": {
+        "pairing": [
+          "solid-color top"
+        ],
+        "footwear": [
+          "clean sneakers"
+        ],
+        "accessories": [
+          "simple watch"
+        ],
+        "layering": []
+      },
+      "sporty": {
+        "pairing": [
+          "athletic t-shirt"
+        ],
+        "footwear": [
+          "chunky sneakers"
+        ],
+        "accessories": [
+          "sports watch",
+          "cap"
+        ],
+        "layering": []
+      }
+    }
+  },
+
+  "shirt": {
+    "pairing": [
+      "jeans"
+    ],
+    "footwear": [
+      "sneakers"
+    ],
+    "accessories": [
+      "simple watch"
+    ],
+    "layering": [],
+    "styles": {
+      "casual": {
+        "pairing": [
+          "jeans"
+        ],
+        "footwear": [
+          "sneakers"
+        ],
+        "accessories": [],
+        "layering": []
+      },
+      "minimal": {
+        "pairing": [
+          "solid trousers"
+        ],
+        "footwear": [
+          "clean sneakers"
+        ],
+        "accessories": [
+          "simple watch"
+        ],
+        "layering": []
+      },
+      "formal": {
+        "pairing": [
+          "formal trousers"
+        ],
+        "footwear": [
+          "dress shoes"
+        ],
+        "accessories": [
+          "simple watch"
+        ],
+        "layering": []
+      }
+    }
+  },
+
+  "t-shirt": {
+    "pairing": [
+      "jeans"
+    ],
+    "footwear": [
+      "sneakers"
+    ],
+    "accessories": [
+      "simple watch"
+    ],
+    "layering": [
+      "denim jacket"
+    ],
+    "styles": {
+      "casual": {
+        "pairing": [
+          "jeans"
+        ],
+        "footwear": [
+          "sneakers"
+        ],
+        "accessories": [
+          "crossbody bag"
+        ],
+        "layering": [
+          "denim jacket"
+        ]
+      },
+      "minimal": {
+        "pairing": [
+          "solid trousers"
+        ],
+        "footwear": [
+          "clean sneakers"
+        ],
+        "accessories": [
+          "simple watch"
+        ],
+        "layering": []
+      },
+      "sporty": {
+        "pairing": [
+          "joggers"
+        ],
+        "footwear": [
+          "running sneakers"
+        ],
+        "accessories": [
+          "sports watch",
+          "cap"
+        ],
+        "layering": [
+          "lightweight jacket"
+        ]
+      }
+    }
+  },
+
+  "jeans": {
+    "pairing": [
+      "basic t-shirt"
+    ],
+    "footwear": [
+      "sneakers"
+    ],
+    "accessories": [
+      "simple watch"
+    ],
+    "layering": [
+      "denim jacket"
+    ],
+    "styles": {
+      "casual": {
+        "pairing": [
+          "basic t-shirt"
+        ],
+        "footwear": [
+          "sneakers"
+        ],
+        "accessories": [
+          "crossbody bag"
+        ],
+        "layering": [
+          "denim jacket"
+        ]
+      },
+      "minimal": {
+        "pairing": [
+          "solid-color top"
+        ],
+        "footwear": [
+          "clean sneakers"
+        ],
+        "accessories": [
+          "simple watch"
+        ],
+        "layering": []
+      },
+      "streetwear": {
+        "pairing": [
+          "oversized hoodie"
+        ],
+        "footwear": [
+          "chunky sneakers"
+        ],
+        "accessories": [
+          "crossbody bag",
+          "cap"
+        ],
+        "layering": []
+      }
+    }
+  }
+}
