@@ -4,6 +4,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import uiReducer from "./uiSlice";
 import authReducer from "./authSlice";
 import productFinderReducer from "./productFinderSlice";
+import profileReducer from "./profileSlice";
 
 export const makeStore = () =>
   configureStore({
@@ -11,6 +12,7 @@ export const makeStore = () =>
       ui: uiReducer,
       auth: authReducer,
       productFinder: productFinderReducer,
+      profile: profileReducer,
     },
   });
 
