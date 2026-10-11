@@ -11,6 +11,7 @@ from app.services.dependencies import get_valid_image
 from app.services.image.processor import process_image
 
 from app.routes.product_finder import router as product_finder_router
+from app.routes.ai_specialist import router as ai_specialist_router
 
 
 app = FastAPI(title="StyleMirror API")
@@ -40,6 +41,7 @@ app.add_middleware(
 # Routes
 app.include_router(auth_router)
 app.include_router(product_finder_router)
+app.include_router(ai_specialist_router)
 
 @app.get("/")
 def root():
