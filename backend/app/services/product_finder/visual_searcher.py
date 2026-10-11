@@ -198,7 +198,7 @@ def search_google_lens(
         {
             "engine": "google_lens",
             "image_id": image_id,
-            "type": "products",
+            "type": "visual_matches",
             "hl": "en",
             "country": "in",
             "safe": "active",
