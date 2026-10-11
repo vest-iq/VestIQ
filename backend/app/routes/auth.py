@@ -68,6 +68,7 @@ def signup(request: Request, data: SignupRequest):
         )
 
 
+
 @router.post("/login")
 @limiter.limit("5/minute")
 def login(request: Request, data: LoginRequest):
@@ -90,19 +91,22 @@ def login(request: Request, data: LoginRequest):
             "user": {
                 "id": response.user.id,
                 "email": response.user.email,
-                "first_name": response.user.user_metadata.get("first_name"),
-                "last_name": response.user.user_metadata.get("last_name")
+                "first_name": (response.user.user_metadata or {}).get("first_name"),
+                "last_name": (response.user.user_metadata or {}).get("last_name")
             }
         }
 
     except HTTPException:
         raise
 
-    except Exception:
+    except Exception as exc:
+        # Diagnostic logging: do not log passwords or tokens.
+        print(f"[AUTH LOGIN ERROR] {type(exc).__name__}: {exc}")
         raise HTTPException(
             status_code=401,
             detail="Invalid email or password"
         )
+
 
 @router.post("/refresh")
 @limiter.limit("20/minute")
