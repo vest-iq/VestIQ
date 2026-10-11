@@ -89,3 +89,52 @@ export async function apiRequest<T>(
 
   return response.json() as Promise<T>;
 }
+
+
+export type ProductFinderProduct = {
+  name: string | null;
+  brand: string | null;
+  category: string | null;
+  product_url: string;
+  source: string | null;
+  price: number | null;
+  currency: string | null;
+  availability: string | null;
+  image_url: string | null;
+  color: string | null;
+  pattern: string | null;
+  material: string | null;
+  fit: string | null;
+  description: string | null;
+  extraction: {
+    methods_used: string[];
+    confidence: number;
+    warnings: string[];
+  };
+};
+
+export type ProductFinderResponse = {
+  provider: string | null;
+  cached: boolean;
+  products_found: number;
+  products: ProductFinderProduct[];
+  diagnostics: Record<string, unknown>;
+};
+
+export async function searchProductsByImage(
+  file: File,
+): Promise<ProductFinderResponse> {
+  const formData = new FormData();
+
+  // Must match FastAPI's UploadFile dependency parameter.
+  formData.append("file", file);
+
+  return apiRequest<ProductFinderResponse>(
+    "/product-finder/search",
+    {
+      method: "POST",
+      body: formData,
+    },
+  );
+}
+

@@ -1,13 +1,16 @@
 
 import { configureStore } from "@reduxjs/toolkit";
+
 import uiReducer from "./uiSlice";
 import authReducer from "./authSlice";
+import productFinderReducer from "./productFinderSlice";
 
 export const makeStore = () =>
   configureStore({
     reducer: {
       ui: uiReducer,
       auth: authReducer,
+      productFinder: productFinderReducer,
     },
   });
 
