@@ -1,6 +1,6 @@
   # VestIQ --- AI-Powered Personal Fashion Assistant
 
-VestIQ (formerly referred to as StyleMirror) is an AI-powered fashion
+VestIQ is an AI-powered fashion
 assistant designed to help users discover clothing, understand how items
 may suit them, and get practical styling guidance through a modern,
 responsive web experience.
