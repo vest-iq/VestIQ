@@ -1,5 +1,9 @@
 
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {
+  createAsyncThunk,
+  createSlice,
+  type PayloadAction,
+} from "@reduxjs/toolkit";
 import { apiRequest, ApiError } from "@/lib/api";
 
 export interface AuthUser {
@@ -32,6 +36,12 @@ interface LoginResponse {
   access_token: string;
   refresh_token: string;
   user: AuthUser;
+}
+
+export interface SavedAuthSession {
+  user: AuthUser;
+  accessToken: string;
+  refreshToken: string;
 }
 
 type RequestStatus = "idle" | "loading" | "succeeded" | "failed";
@@ -105,9 +115,20 @@ const authSlice = createSlice({
     clearAuthError(state) {
       state.error = null;
     },
+
     clearAuthMessage(state) {
       state.message = null;
     },
+
+    restoreSession(state, action: PayloadAction<SavedAuthSession>) {
+      state.user = action.payload.user;
+      state.accessToken = action.payload.accessToken;
+      state.refreshToken = action.payload.refreshToken;
+      state.status = "idle";
+      state.error = null;
+      state.message = null;
+    },
+
     logoutLocal(state) {
       state.user = null;
       state.accessToken = null;
@@ -117,6 +138,7 @@ const authSlice = createSlice({
       state.message = null;
     },
   },
+
   extraReducers: (builder) => {
     builder
       .addCase(signupUser.pending, (state) => {
@@ -133,6 +155,7 @@ const authSlice = createSlice({
         state.error =
           action.payload ?? action.error.message ?? "Signup failed.";
       })
+
       .addCase(loginUser.pending, (state) => {
         state.status = "loading";
         state.error = null;
@@ -153,7 +176,11 @@ const authSlice = createSlice({
   },
 });
 
-export const { clearAuthError, clearAuthMessage, logoutLocal } =
-  authSlice.actions;
+export const {
+  clearAuthError,
+  clearAuthMessage,
+  restoreSession,
+  logoutLocal,
+} = authSlice.actions;
 
 export default authSlice.reducer;
