@@ -28,8 +28,6 @@ responsive web experience.
 -   **API-first backend:** FastAPI services with request validation and
     rate limiting.
 
-**Virtual Try-On is not part of the current feature scope.**
-
 ## Tech Stack
 
 ### Frontend
@@ -258,5 +256,4 @@ test changes feature by feature.
 
 ## License
 
-This project is licensed under the **MIT License**. See the
-[LICENSE](LICENSE) file for details.
+This project is licensed under the **MIT License**.
