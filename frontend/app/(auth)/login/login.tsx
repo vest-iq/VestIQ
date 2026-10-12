@@ -306,6 +306,7 @@
 
 import { useEffect, useState, type FormEvent } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation"; // Added router import
 import {
   ArrowRight,
   Eye,
@@ -333,7 +334,6 @@ type LoginErrors = Partial<Record<keyof LoginValues, string>>;
 const fashionSlides = [
   {
      image:
-    
       "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=1400&q=90",
     eyebrow: "YOUR STYLE, REIMAGINED",
     title: "Fashion that",
@@ -375,6 +375,8 @@ const fashionSlides = [
 ];
 
 export default function Login() {
+  const router = useRouter(); // Initialized the router
+  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -391,9 +393,17 @@ export default function Login() {
     status,
     error: authError,
     message: authMessage,
+    user,
+    accessToken
   } = useAppSelector((state) => state.auth);
 
   const isLoading = status === "loading";
+
+  useEffect(() => {
+    if (user && accessToken) {
+      router.replace("/dashboard");
+    }
+  }, [user, accessToken, router]);
 
   useEffect(() => {
     if (isCarouselPaused) return;
@@ -404,6 +414,10 @@ export default function Login() {
 
     return () => window.clearInterval(interval);
   }, [isCarouselPaused]);
+
+  if (user && accessToken) {
+    return null; 
+  }
 
   function validate(): LoginErrors {
     const nextErrors: LoginErrors = {};
@@ -459,6 +473,10 @@ export default function Login() {
 
       // Remember-me persistence is not connected to token storage yet.
       void rememberMe;
+      
+      // Redirect to dashboard on successful login
+      router.push("/dashboard");
+      
     } catch {
       // Redux stores the readable API error in auth.error.
     }
@@ -517,18 +535,6 @@ export default function Login() {
             <div className="absolute inset-0 bg-gradient-to-t from-[#070713] via-[#070713]/45 to-[#080817]/10" />
             <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#0a0a19]/25" />
 
-            <div className="absolute left-8 right-8 top-8 flex items-center justify-between lg:left-9 lg:right-9">
-              {/* <span className="text-[10px] font-medium tracking-[0.22em] text-white/70">
-                VESTIQ 
-              </span> */}
-
-              {/* <span className="text-xs tracking-[0.18em] text-white/70">
-                0{activeSlide + 1}
-                <span className="mx-1 text-white/30">/</span>
-                0{fashionSlides.length}
-              </span> */}
-            </div>
-
             {/* Text changes with every image */}
             <div className="absolute bottom-[76px] left-8 right-8 lg:left-9 lg:right-9">
               <AnimatePresence mode="wait">
@@ -557,7 +563,7 @@ export default function Login() {
                 </motion.div>
               </AnimatePresence>
 
-              {/* Minimal slide indicators; no feature pills */}
+              {/* Minimal slide indicators */}
               <div className="mt-7 flex items-center gap-2">
                 {fashionSlides.map((item, index) => (
                   <button
@@ -903,7 +909,7 @@ export default function Login() {
           border: 0;
           border-radius: 999px;
           background: transparent;
-          padding: 0 42px 0 48px;
+          padding: 0 10px 0 10px;
           color: #f7f5ff;
           font-size: 12px;
           outline: none;
@@ -1040,6 +1046,20 @@ export default function Login() {
           .slide-indicator {
             transition: none !important;
           }
+        }
+
+        :global(.auth-input:-webkit-autofill),
+        :global(.auth-input:-webkit-autofill:hover),
+        :global(.auth-input:-webkit-autofill:focus),
+        :global(.auth-input:-webkit-autofill:active) {
+          -webkit-text-fill-color: #f7f5ff !important;
+          transition: background-color 9999s ease-in-out 0s !important;
+          caret-color: #f7f5ff !important;
+        }
+
+        :global(.auth-input::placeholder) {
+          color: #6d7697 !important;
+          opacity: 1;
         }
       `}</style>
     </main>

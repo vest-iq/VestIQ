@@ -366,11 +366,11 @@
 //   );
 // }
 
-
 "use client";
 
 import { useEffect, useState, type FormEvent } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation"; // Added router import
 import {
   ArrowRight,
   Eye,
@@ -452,6 +452,8 @@ function countWord(word: string) {
 }
 
 export default function Signup() {
+  const router = useRouter(); // Initialized the router
+
   const [values, setValues] = useState<FormValues>(initialValues);
   const [errors, setErrors] = useState<FormErrors>({});
   const [showPassword, setShowPassword] = useState(false);
@@ -464,9 +466,17 @@ export default function Signup() {
     status,
     error: authError,
     message: authMessage,
+    user,
+    accessToken
   } = useAppSelector((state) => state.auth);
 
   const isLoading = status === "loading";
+
+  useEffect(() => {
+    if (user && accessToken) {
+      router.replace("/dashboard");
+    }
+  }, [user, accessToken, router]);
 
   // Rotate the four fashion images automatically.
   useEffect(() => {
@@ -476,6 +486,8 @@ export default function Signup() {
 
     return () => window.clearInterval(timer);
   }, []);
+
+
 
   // Brief shine when the submit button is clicked.
   useEffect(() => {
@@ -487,6 +499,10 @@ export default function Signup() {
 
     return () => window.clearTimeout(timer);
   }, [buttonPressed]);
+
+  if (user && accessToken) {
+    return null; 
+  }
 
   function validate(): FormErrors {
     const nextErrors: FormErrors = {};
@@ -543,6 +559,9 @@ export default function Signup() {
           password: values.password,
         }),
       ).unwrap();
+
+      // Redirect to dashboard on successful signup
+      router.push("/dashboard");
     } catch {
       // The Redux slice supplies the readable error.
     }
@@ -594,7 +613,7 @@ export default function Signup() {
 
             <div className="absolute inset-0 bg-gradient-to-t from-[#070713] via-[#070713]/40 to-[#080817]/10" />
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[#0a0a19]/35" />
-           
+
             <div className="absolute inset-x-0 bottom-0 z-10 p-7 lg:p-9">
               <AnimatePresence mode="wait">
                 <motion.div
@@ -604,14 +623,12 @@ export default function Signup() {
                   exit={{ opacity: 0, y: -5 }}
                   transition={{ duration: 0.35 }}
                 >
-               
                   <p className="mb-3 text-[11px] font-semibold tracking-[0.24em] text-[#d5a7ff]">
                     {slides[activeSlide].eyebrow}
                   </p>
 
                   <h2 className="max-w-[360px] text-[30px] font-semibold leading-[1.15] tracking-tight lg:text-[36px]">
                     {slides[activeSlide].first}{" "}
-                 
                     <span className="bg-gradient-to-r from-[#f2b3ff] to-[#a998ff] bg-clip-text text-transparent">
                       {slides[activeSlide].highlight}
                     </span>
@@ -761,9 +778,7 @@ export default function Signup() {
 
                     <button
                       type="button"
-                      onClick={() =>
-                        setShowPassword((current) => !current)
-                      }
+                      onClick={() => setShowPassword((current) => !current)}
                       aria-label={
                         showPassword ? "Hide password" : "Show password"
                       }
@@ -785,14 +800,14 @@ export default function Signup() {
                 {/* Fixed-height feedback prevents layout shifts */}
                 <div className="feedback-slot" aria-live="polite">
                   {authError ? (
-                    <p
-                      role="alert"
-                      className="feedback-message error-message"
-                    >
+                    <p role="alert" className="feedback-message error-message">
                       {authError}
                     </p>
                   ) : authMessage ? (
-                    <p role="status" className="feedback-message success-message">
+                    <p
+                      role="status"
+                      className="feedback-message success-message"
+                    >
                       <CheckCircle2 className="h-4 w-4 shrink-0" />
                       <span className="line-clamp-2">{authMessage}</span>
                     </p>
@@ -853,11 +868,7 @@ export default function Signup() {
         .signup-background {
           background-color: #060613;
           background-image:
-            linear-gradient(
-              180deg,
-              rgba(5, 5, 18, 0.08),
-              rgba(5, 5, 18, 0.12)
-            ),
+            linear-gradient(180deg, rgba(5, 5, 18, 0.08), rgba(5, 5, 18, 0.12)),
             url("/upload/background1.png");
           background-position: center;
           background-repeat: no-repeat;
@@ -869,7 +880,12 @@ export default function Signup() {
         }
 
         .brand-iq {
-          background: linear-gradient(115deg, #e7a5ff 10%, #ad79ff 70%, #f1b7ff);
+          background: linear-gradient(
+            115deg,
+            #e7a5ff 10%,
+            #ad79ff 70%,
+            #f1b7ff
+          );
           -webkit-background-clip: text;
           background-clip: text;
           color: transparent;
@@ -954,7 +970,7 @@ export default function Signup() {
           border: 0 !important;
           border-radius: 999px !important;
           background: transparent !important;
-          padding: 0 42px 0 48px !important;
+          padding: 0 10px 0 10px !important;
           color: #f7f5ff !important;
           font-size: 12px !important;
           box-shadow: none !important;
@@ -1090,6 +1106,20 @@ export default function Signup() {
           .button-gloss {
             transition: none !important;
           }
+        }
+
+        :global(.auth-input:-webkit-autofill),
+        :global(.auth-input:-webkit-autofill:hover),
+        :global(.auth-input:-webkit-autofill:focus),
+        :global(.auth-input:-webkit-autofill:active) {
+          -webkit-text-fill-color: #f7f5ff !important;
+          transition: background-color 9999s ease-in-out 0s !important;
+          caret-color: #f7f5ff !important;
+        }
+
+        :global(.auth-input::placeholder) {
+          color: #6d7697 !important;
+          opacity: 1;
         }
       `}</style>
     </main>
