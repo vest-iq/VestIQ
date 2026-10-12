@@ -117,26 +117,6 @@ current compatibility dataset does not itself provide the
 person-photo-plus-clothing context needed for full person-aware
 analysis.
 
-## Repository Layout
-
-The exact layout may evolve as development continues. The intended
-separation is:
-
-``` text
-VestIQ/
-├── frontend/          # Next.js web application
-├── backend/           # FastAPI API and services
-└── ml/                # ML experiments, training and inference
-    ├── configs/
-    ├── data/
-    ├── evaluations/
-    ├── inferences/
-    ├── models/
-    ├── notebooks/
-    ├── preprocessing/
-    └── training/
-```
-
 Keep model training and experimentation separate from the API
 implementation. Integrate validated inference code into the backend only
 after testing it independently.
